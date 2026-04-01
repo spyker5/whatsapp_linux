@@ -13,6 +13,9 @@ const {
 
 const WHATSAPP_URL = "https://web.whatsapp.com/";
 const ICON_PATH = path.join(__dirname, "..", "assets", "icon.png");
+const WHATSAPP_HOSTS = ["https://web.whatsapp.com/*", "https://*.whatsapp.net/*"];
+const CHROME_USER_AGENT =
+  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36";
 
 let mainWindow;
 let tray;
@@ -38,6 +41,18 @@ function showMainWindow() {
   mainWindow.focus();
 }
 
+function loadWhatsApp(targetWindow = mainWindow) {
+  if (!targetWindow) {
+    return;
+  }
+
+  targetWindow.webContents.setUserAgent(CHROME_USER_AGENT);
+  targetWindow.loadURL(WHATSAPP_URL, {
+    userAgent: CHROME_USER_AGENT,
+    httpReferrer: "https://web.whatsapp.com/"
+  });
+}
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
@@ -59,7 +74,7 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadURL(WHATSAPP_URL);
+  loadWhatsApp();
 
   mainWindow.once("ready-to-show", () => {
     if (process.argv.includes("--start-minimized")) {
@@ -139,6 +154,22 @@ function setupPermissions() {
 
     callback({ responseHeaders: headers });
   });
+
+  ses.webRequest.onBeforeSendHeaders({ urls: WHATSAPP_HOSTS }, (details, callback) => {
+    const requestHeaders = {
+      ...details.requestHeaders,
+      "User-Agent": CHROME_USER_AGENT
+    };
+
+    delete requestHeaders["Sec-CH-UA"];
+    delete requestHeaders["Sec-CH-UA-Mobile"];
+    delete requestHeaders["Sec-CH-UA-Platform"];
+    delete requestHeaders["sec-ch-ua"];
+    delete requestHeaders["sec-ch-ua-mobile"];
+    delete requestHeaders["sec-ch-ua-platform"];
+
+    callback({ requestHeaders });
+  });
 }
 
 function buildMenu() {
@@ -156,7 +187,7 @@ function buildMenu() {
         {
           label: "Recarregar WhatsApp",
           accelerator: "CmdOrCtrl+R",
-          click: () => mainWindow?.loadURL(WHATSAPP_URL)
+          click: () => loadWhatsApp()
         },
         {
           label: "Forcar recarga",
@@ -231,7 +262,7 @@ function createTray() {
       },
       {
         label: "Recarregar",
-        click: () => mainWindow?.loadURL(WHATSAPP_URL)
+        click: () => loadWhatsApp()
       },
       { type: "separator" },
       {
@@ -264,7 +295,7 @@ function setupAutoLaunch() {
 
 function setupIpc() {
   ipcMain.on("app:reload", () => {
-    mainWindow?.loadURL(WHATSAPP_URL);
+    loadWhatsApp();
   });
 
   ipcMain.handle("app:get-settings", () => {
