@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline';"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhatsApp Linux</title>
+    <style>
+      :root {
+        --bg: #0b141a;
+        --panel: rgba(32, 44, 51, 0.88);
+        --text: #e9edef;
+        --muted: #aebac1;
+        --accent: #25d366;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at top, rgba(37, 211, 102, 0.18), transparent 28%),
+          linear-gradient(180deg, #111b21 0%, var(--bg) 100%);
+        color: var(--text);
+        font-family: "Noto Sans", "DejaVu Sans", sans-serif;
+      }
+
+      main {
+        width: min(560px, calc(100vw - 32px));
+        padding: 32px;
+        border-radius: 24px;
+        background: var(--panel);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: 2rem;
+      }
+
+      p {
+        margin: 0 0 16px;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+
+      button {
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 18px;
+        font: inherit;
+        font-weight: 700;
+        color: #03150a;
+        background: var(--accent);
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>WhatsApp Linux</h1>
+      <p>
+        Nao foi possivel carregar o WhatsApp Web agora. Isso costuma acontecer se a rede
+        estiver indisponivel ou se o servico estiver temporariamente inacessivel.
+      </p>
+      <p>Verifique sua conexao e tente recarregar a janela.</p>
+      <button type="button" onclick="window.location.reload()">Tentar novamente</button>
+    </main>
+  </body>
+  </html>

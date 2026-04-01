@@ -1,0 +1,47 @@
+{
+  "name": "whatsapp-linux",
+  "version": "0.1.0",
+  "description": "Aplicativo desktop para Linux baseado no WhatsApp Web com suporte a notificacoes, camera, microfone e envio de arquivos.",
+  "homepage": "https://web.whatsapp.com/",
+  "main": "src/main.js",
+  "author": {
+    "name": "Lucas",
+    "email": "lucas@example.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --linux AppImage deb tar.gz"
+  },
+  "build": {
+    "appId": "com.lucas.whatsapplinux",
+    "productName": "WhatsApp Linux",
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "linux": {
+      "icon": "icon.png",
+      "category": "Network;Chat;InstantMessaging",
+      "maintainer": "Lucas <lucas@example.com>",
+      "target": [
+        "AppImage",
+        "deb",
+        "tar.gz"
+      ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^37.2.1",
+    "electron-builder": "^26.0.12"
+  }
+}
